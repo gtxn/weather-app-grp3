@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MaterialApp(
+    title: 'Navigation Basics',
+    home: MyApp(),
+  ));
+  
 }
 
 class MyApp extends StatelessWidget {
@@ -22,34 +26,70 @@ class MyApp extends StatelessWidget {
                 /*2*/
                 Container(
                   padding: const EdgeInsets.only(bottom: 8),
-                  child: const Text(
-                    'Oeschinen Lake Campground',
+                  child: 
+              const Text(
+                   'Welcome to integrate your lectures with your weather APP! \n \nYour iCal URL contains a secure token that prevents other people from accessing the events in your diary. You can deliberately share it with other people if you wish to let them see what is on your calendar.\n\nHow to find it?  Good question!',       
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                Text(
-                  'Kandersteg, Switzerland',
-                  style: TextStyle(
-                    color: Colors.grey[500],
-                  ),
+              Text(
+              'Google Calendar: under "Other Calendars", choose "Add by URL" and paste your URL.\n  \nMicrosoft Outlook: on the Home Tab in Outlook 2016, click the "Open Calendar" dropdown. Select "From Internet" and paste your URL.\n \nApple Calendar: on the File menu, select "Add Calendar Subscription..." and paste your URL.\nQuoted with thanks from KuDoS system.\n \nFor other situation, please have a search online.\n \n ',
+              style: TextStyle(
+                color: Colors.grey[500],
+              ),
+              ),
+            const Text(
+                  'Enter your iCal link here:',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
                 ),
+              ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'If you would like to sync the app with your calendar, enter the link here.\n',
+            ),
+          ),
+        ),
+      Align(
+        alignment: Alignment.centerRight,
+        child:
+          ElevatedButton(
+          child: const Text('Submit'),
+          style: ElevatedButton.styleFrom(
+           backgroundColor: Colors.green, // background
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SecondRoute()),
+            );
+          },
+        ),),
+        ElevatedButton(
+          child: const Text('Go Back!'),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SecondRoute()),
+            );
+          },
+        ),  
               ],
             ),
           ),
           /*3*/
-          Icon(
-            Icons.star,
-            color: Colors.red[500],
-          ),
-          const Text('41'),
+          
         ],
       ),
     );
 
     return MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Calendar Sync',
         theme: ThemeData(
           // This is the theme of your application.
           //
@@ -64,7 +104,7 @@ class MyApp extends StatelessWidget {
         ),
         home: Scaffold(
             appBar: AppBar(
-              title: const Text('Flutter layout demo'),
+              title: const Text('Calendar Sync'),
             ),
             body: Column(
               children: [
@@ -75,7 +115,26 @@ class MyApp extends StatelessWidget {
         );
   }
 }
+class SecondRoute extends StatelessWidget {
+  const SecondRoute({super.key});
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Second Page (Demo)'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Go back!'),
+        ),
+      ),
+    );
+  }
+}
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 

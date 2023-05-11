@@ -21,3 +21,9 @@ Functionality Done
 2. Input text box
 3. Submit and Go back buttons.
 4. Transition between pages
+5. Retrieve input iCal
+
+## Reference
+switch between the pagehttps://docs.flutter.dev/cookbook/navigation/navigation-basics
+Text input box https://docs.flutter.dev/cookbook/forms/text-input
+Retrieve the input https://docs.flutter.dev/cookbook/forms/retrieve-input

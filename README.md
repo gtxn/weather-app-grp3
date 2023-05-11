@@ -23,6 +23,8 @@ Functionality Done
 4. Transition between pages
 5. Retrieve input iCal
 
+final myController = TextEditingController();
+
 ## Reference
 switch between the pagehttps://docs.flutter.dev/cookbook/navigation/navigation-basics
 Text input box https://docs.flutter.dev/cookbook/forms/text-input

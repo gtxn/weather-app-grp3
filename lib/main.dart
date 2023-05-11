@@ -11,11 +11,9 @@ final myController = TextEditingController();
 
 class MyApp extends StatelessWidget {
  const  MyApp({super.key});
- 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
- 
     Widget titleSection = Container(
       padding: const EdgeInsets.all(32),
       child: Row(
@@ -36,36 +34,40 @@ class MyApp extends StatelessWidget {
                     ),
                   ),
                 ),
+
               Text(
               'Google Calendar: under "Other Calendars", choose "Add by URL" and paste your URL.\n  \nMicrosoft Outlook: on the Home Tab in Outlook 2016, click the "Open Calendar" dropdown. Select "From Internet" and paste your URL.\n \nApple Calendar: on the File menu, select "Add Calendar Subscription..." and paste your URL.\nQuoted with thanks from KuDoS system.\n \nFor other situations, please have a search online.\n \n ',
               style: TextStyle(
                 color: Colors.grey[500],
               ),
               ),
+
             const Text(
                   'Enter your iCal link here:',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                 ),
               ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: TextField(
-              controller: myController,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'If you would like to sync the app with your calendar, enter the link here.\n',
+              
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: TextField(
+                  controller: myController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'If you would like to sync the app with your calendar, enter the link here.\n',
+                ),
+              ),
             ),
-          ),
-        ),
-      Align(
-        alignment: Alignment.centerRight,
-        child:
-          ElevatedButton(
-          child: const Text('Submit'),
-          style: ElevatedButton.styleFrom(
-           backgroundColor: Colors.green, // background
-          ),
+
+        Align(
+         alignment: Alignment.centerRight,
+          child:
+            ElevatedButton(
+            child: const Text('Submit'),
+            style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green, // background
+            ),
            onPressed: () {
          showDialog(
             context: context,
@@ -125,7 +127,7 @@ class MyApp extends StatelessWidget {
         );
   }
 }
-
+// DEMO Page
 class SecondRoute extends StatelessWidget {
   const SecondRoute({super.key});
 

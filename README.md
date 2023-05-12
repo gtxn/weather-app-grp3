@@ -26,6 +26,8 @@ Functionality Done
 final myController = TextEditingController();
 
 ## Reference
-switch between the pagehttps://docs.flutter.dev/cookbook/navigation/navigation-basics
+switch between the page https://docs.flutter.dev/cookbook/navigation/navigation-basics
+
 Text input box https://docs.flutter.dev/cookbook/forms/text-input
+
 Retrieve the input https://docs.flutter.dev/cookbook/forms/retrieve-input

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:weather_app/assets/Constants.dart';
 
 void main() {
   runApp(const MyApp());
@@ -6,6 +8,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  static Constants style = Constants();
 
   // This widget is the root of your application.
   @override
@@ -41,7 +44,7 @@ class MyApp extends StatelessWidget {
           /*3*/
           Icon(
             Icons.star,
-            color: Colors.red[500],
+            color: Constants().bg,
           ),
           const Text('41'),
         ],
@@ -51,17 +54,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.blue,
-        ),
+            // This is the theme of your application.
+            //
+            // Try running your application with "flutter run". You'll see the
+            // application has a blue toolbar. Then, without quitting the app, try
+            // changing the primarySwatch below to Colors.green and then invoke
+            // "hot reload" (press "r" in the console where you ran "flutter run",
+            // or simply save your changes to "hot reload" in a Flutter IDE).
+            // Notice that the counter didn't reset back to zero; the application
+            // is not restarted.
+            primarySwatch: style.primary,
+            scaffoldBackgroundColor: style.bg,
+            textTheme: GoogleFonts.latoTextTheme(Theme.of(context)
+                .textTheme
+                .copyWith(bodyLarge: TextStyle(color: style.primary[50])))),
         home: Scaffold(
             appBar: AppBar(
               title: const Text('Flutter layout demo'),

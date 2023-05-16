@@ -50,6 +50,13 @@ class WeatherOverlay extends StatefulWidget {
 
 class _WeatherOverlayState extends State<WeatherOverlay> {
   Constants style = Constants();
+  bool _isVisible = false;
+
+  void _toggleState() {
+    setState(() {
+      _isVisible = !_isVisible;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +69,12 @@ class _WeatherOverlayState extends State<WeatherOverlay> {
       items.add(ListItem('${nowStr}:00', 1));
     }
 
-    return Visibility(
-      visible: true,
-      maintainSize: true,
-      maintainAnimation: true,
-      maintainState: true,
-      child: Expanded(
+    return Expanded(
+      child: Visibility(
+        visible: _isVisible,
+        maintainSize: true,
+        maintainAnimation: true,
+        maintainState: true,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -95,8 +102,11 @@ class _WeatherOverlayState extends State<WeatherOverlay> {
                     right: 20,
                     top: 20,
                     // TODO: close button implementation
-                    child: Icon(
-                      Icons.close,
+                    child: IconButton(
+                      onPressed: _toggleState,
+                      icon: Icon(
+                        Icons.close,
+                      ),
                     ),
                   ),
                 ],

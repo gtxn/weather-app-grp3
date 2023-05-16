@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:icalendar_parser/icalendar_parser.dart';
+ 
 
 void main() {
   runApp(const MaterialApp(
@@ -50,7 +55,7 @@ class MyApp extends StatelessWidget {
               ),
               
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: TextField(
                   controller: myController,
                 decoration: const InputDecoration(
@@ -64,7 +69,6 @@ class MyApp extends StatelessWidget {
          alignment: Alignment.centerRight,
           child:
             ElevatedButton(
-            child: const Text('Submit'),
             style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green, // background
             ),
@@ -75,11 +79,12 @@ class MyApp extends StatelessWidget {
               return AlertDialog(
                 // Retrieve the text the that user has entered by using the
                 // TextEditingController.
-                content: Text("Received iCal:"+myController.text),
+                content: Text("Received iCal:${myController.text}"),
               );
             },
           );
           },
+            child: const Text('Submit'),
         ),),
         
         ElevatedButton(
@@ -127,24 +132,55 @@ class MyApp extends StatelessWidget {
         );
   }
 }
+Future<void> parseIcsFile(String filePath) async {
+    final lines = await File(filePath).readAsLines();
+ 
+    final json = ICalendar.fromLines(lines).toJson();
+    final buffer = StringBuffer('File: $filePath\n');
+    final prettyprint = const JsonEncoder.withIndent('  ').convert(json);
+    buffer.writeln(prettyprint);
+    print(buffer.toString());
+  }
+// Future<String> get _localPath async {
+//     final directory = await getApplicationDocumentsDirectory();
+ 
+//     return directory.path;
+//   }
 // DEMO Page
 class SecondRoute extends StatelessWidget {
   const SecondRoute({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Second Page (Demo)'),
+        
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
+      body:Column(
+        children:  [ElevatedButton(
+          onPressed: ()  {
+          Navigator.pop(context);
           },
           child: const Text('Go back!'),
+          
         ),
+
+        ElevatedButton(
+          onPressed: () async {
+      
+          // final path = await _localPath;
+          parseIcsFile('lib/calendar.ics');
+
+          },
+          child: const Text('Test iCal!'),
+          
+        ),]
+
+
+        
       ),
+      
     );
   }
 }

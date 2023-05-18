@@ -5,6 +5,8 @@ void main() {
   runApp(const MyApp());
 }
 
+var events = ["hi", "hello", "lol"];
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -70,7 +72,7 @@ class MyApp extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 50.0),
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 100),
+                padding: const EdgeInsets.fromLTRB(0, 150, 0, 50),
                 child: Column(
                   children: [
                     Text(
@@ -92,21 +94,10 @@ class MyApp extends StatelessWidget {
                         ),
                         Align(
                           alignment: Alignment.centerRight,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              IconButton.filledTonal(
-                                // heroTag: "topWeather",
-                                onPressed: () => {},
-                                icon: const Icon(Icons.sunny),
-                              ),
-                              IconButton.filledTonal(
-                                // heroTag: "botWeather",
-                                onPressed: () => {},
-                                icon: const Icon(Icons.air),
-                              ),
-                            ],
+                          child: FloatingActionButton(
+                            // heroTag: "topWeather",
+                            onPressed: () => {},
+                            child: const Icon(Icons.sunny),
                           ),
                         )
                       ],
@@ -116,22 +107,47 @@ class MyApp extends StatelessWidget {
               ),
               const Divider(),
               ...ListTile.divideTiles(context: context, tiles: [
-                ListTile(
-                  title: Text(
-                    "time of next rain",
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  trailing: Text(
-                    "10am",
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
+                const ListTile(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  title: ListTitleText(title: "time of next rain"),
+                  trailing: ListTitleText(title: "10am"),
                 ),
+                ExpansionTile(
+                  title: const ListTitleText(title: "Next event 1"),
+                  children: [
+                    ...[for (var i = 2; i <= 10; i++) i].map((e) => ListTile(
+                          title: ListTitleText(title: "Next event $e"),
+                        )),
+                    Builder(builder: (BuildContext context) {
+                      return IconButton.filled(
+                          onPressed: () {
+                            return ExpansionTileController.of(context)
+                                .collapse();
+                          },
+                          icon: const Icon(Icons.arrow_drop_up));
+                    })
+                  ],
+                )
               ]),
             ],
           ),
         )
         // const MyHomePage(title: 'Flutter Demo Home Page'),
         );
+  }
+}
+
+class ListTitleText extends StatelessWidget {
+  const ListTitleText({super.key, required this.title});
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: Theme.of(context).textTheme.headlineSmall,
+    );
   }
 }
 

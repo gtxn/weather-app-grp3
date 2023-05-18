@@ -8,8 +8,6 @@ void main() {
   runApp(const MyApp());
 }
 
-var events = ["hi", "hello", "lol"];
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   static Constants style = Constants();
@@ -20,6 +18,7 @@ class MyApp extends StatelessWidget {
     const Widget home = MainPage(title: 'test');
 
     var now = DateTime.now();
+
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -34,7 +33,7 @@ class MyApp extends StatelessWidget {
             appBar: AppBar(
               title: const Text('Flutter layout demo'),
             ),
-            body: Column(
+            body: const Column(
               children: [
                 home,
               ],
@@ -49,7 +48,6 @@ class DronPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     var now = DateTime.now();
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 50.0),
@@ -162,6 +160,7 @@ class _MainPageState extends State<MainPage> {
         children: [
           Stack(
             children: [
+              // const DronPage(),
               ElevatedButton(
                 onPressed: toggleWeatherModalOpen,
                 child: const Text("pressToOpenModal"),

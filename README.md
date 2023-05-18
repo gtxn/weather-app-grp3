@@ -30,7 +30,7 @@ final myController = TextEditingController();
 2. Add several util functions
 3. 20230518T225557Z Time stamp done!
 4. Read from str to json
-5. Filter and sorting
+5. Filter and sorting based on start time
  
 ## Reference
 switch between the page https://docs.flutter.dev/cookbook/navigation/navigation-basics

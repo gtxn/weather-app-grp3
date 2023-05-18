@@ -193,7 +193,7 @@ END:VCALENDAR""";
           print(iCalendar.toJson());
           final iCalJson=iCalendar.toJson();
           Cal cal=Cal.fromJson(iCalJson);
-          print(cal.latitude);print(cal.longtitude);print(cal.summary);
+          print(cal.latitude);print(cal.longitude);print(cal.summary);
           // final path = await _localPath;
           // parseIcsFile('assets/calendar2.ics');
           },
@@ -207,21 +207,21 @@ END:VCALENDAR""";
 
 
 class Cal {
-  final Float latitude;
-  final Float longtitude;
+  final double latitude;
+  final double longitude;
   final String summary;
 
   const Cal({
     required this.summary,
     required this.latitude,
-    required this.longtitude,
+    required this.longitude,
   });
 
   factory Cal.fromJson(Map<String, dynamic> json) {
     return Cal(
-      summary: json['summary'] as String,
-      latitude: json['geo']['latitude'] as Float,
-      longtitude: json['geo']['longtitude'] as Float
+      summary: json['data'][0]['summary'] as String,
+      latitude: json['data'][0]['geo']['latitude'] as double,
+      longitude: json['data'][0]['geo']['longitude'] as double
     );
   }
 }

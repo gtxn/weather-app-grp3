@@ -25,6 +25,12 @@ Functionality Done
 
 final myController = TextEditingController();
 
+## Parser of iCal
+1. iCal parsing has been integrated in Submit button!
+2. Add several util functions
+3. 20230518T225557Z Time stamp done!
+4. Read from str to json
+5. Filter and sorting
  
 ## Reference
 switch between the page https://docs.flutter.dev/cookbook/navigation/navigation-basics

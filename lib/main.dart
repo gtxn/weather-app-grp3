@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:icalendar_parser/icalendar_parser.dart';
- 
+import  'package:intl/intl.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -84,6 +84,13 @@ class MyApp extends StatelessWidget {
               );
             },
           );
+           // ------------------------- Update ------------------------ 
+            // Usage of the calendarFiltered
+            List<Cal> calendarFiltered=getCal();
+            for(int i=0;i<calendarFiltered.length;i++){
+              calendarFiltered[i].printClassForDebug();
+            }
+            // ------------------------- Update ------------------------ 
           },
             child: const Text('Submit'),
         ),),
@@ -169,10 +176,114 @@ class SecondRoute extends StatelessWidget {
           
         ),
 
-        ElevatedButton(
-          onPressed: ()  {
-        String icalInput =
-        """BEGIN:VCALENDAR
+        ]
+      ),
+      
+    );
+  }
+}
+
+
+
+// ------------------------- Update ------------------------ 
+
+// get the full list of filtered and sorted Calendar objects from [] to pretty much a lot!
+List<Cal> getCal(){
+ // print(currentTimeStampiCal());
+  List<Cal> calendarFiltered=[];
+
+  addCalToList(icalInput1,calendarFiltered);
+  addCalToList(icalInput2,calendarFiltered);
+  addCalToList(icalInput3,calendarFiltered);
+
+  // print(calendarFiltered.length);
+  calendarFiltered.sort((a, b) => a.startTime.compareTo(b.startTime));
+
+  return calendarFiltered;
+}
+// Json Demo:
+// {
+//     "version":"2.0",
+//     "prodid":"-//hacksw/handcal//NONSGML v1.0//EN",
+//     "calscale":"GREGORIAN",
+//     "method":"PUBLISH",
+//     "data":[
+//         {"type":"VEVENT",
+//         "created":{"dt":"19960329T133000Z"},
+//         "uid":"uid1@example.com",
+//         "dtstamp":{"dt":"19970714T170000Z"},
+//         "organizer":{"name":"John Doe","mail":"john.doe@example.com"},
+//         "dtstart":{"dt":"19970714T170000Z"},
+//         "dtend":{"dt":"19970715T035959Z"},
+//         "summary":"Bastille Day Party",
+//         "geo":{"latitude":48.85299,
+//         "longitude":2.36885}}]
+// }       
+class Cal {
+  final double latitude;
+  final double longitude;
+  final String summary;
+  final String startTime;
+  final String endTime;
+
+  const Cal({
+    required this.summary,
+    required this.latitude,
+    required this.longitude,
+    required this.startTime,
+    required this.endTime,
+
+  });
+    
+    factory Cal.fromJson(Map<String, dynamic> json) {
+    return Cal(
+      summary: json['data'][0]['summary'] as String,
+      latitude: json['data'][0]['geo']['latitude'] as double,
+      longitude: json['data'][0]['geo']['longitude'] as double,
+      startTime: json['data'][0]['dtstart']['dt'] as String,
+      endTime: json['data'][0]['dtend']['dt'] as String
+    );  
+  }
+
+  void printClassForDebug(){
+        print(this.latitude);print(this.longitude);print(this.summary);
+        print(this.startTime);print(this.endTime);
+  }
+}
+// Util function:
+String currentTimeStampiCal()
+{
+    // String datetime = DateTime.now().toString();
+    // print(datetime);
+    String cdate = DateFormat("yyyyMMdd").format(DateTime.now());
+    // print(cdate);
+    String tdata = DateFormat("HHmmss").format(DateTime.now());
+    // print(tdata);
+    String fullTime=cdate+'T'+tdata+'Z';
+    // print(fullTime);
+    return fullTime;
+}
+Cal strToCalendarClass(String icalInput){
+    final iCalendar = ICalendar.fromString(icalInput);
+    // print(iCalendar);
+    // print(iCalendar.toJson());
+    final iCalJson=iCalendar.toJson();
+    // final list = List<Cal>.from(iCalJson.map((x) => Cal.fromJson(x)));
+      //  print(list);
+    Cal cal=Cal.fromJson(iCalJson);
+    return cal;
+}
+
+void addCalToList(String calStr,List<Cal> calendarFiltered){
+      Cal cal=strToCalendarClass(calStr);
+        // cal.printClassForDebug();
+      if(cal.startTime.compareTo(currentTimeStampiCal())==1){ 
+          calendarFiltered.add(cal);
+      }
+}
+
+String icalInput1 =
+"""BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//hacksw/handcal//NONSGML v1.0//EN
 CALSCALE:GREGORIAN
@@ -187,41 +298,44 @@ DTEND:19970715T035959Z
 SUMMARY:Bastille Day Party
 GEO:48.85299;2.36885
 END:VEVENT
-END:VCALENDAR""";
-          final iCalendar = ICalendar.fromString(icalInput);
-          print(iCalendar);
-          print(iCalendar.toJson());
-          final iCalJson=iCalendar.toJson();
-          Cal cal=Cal.fromJson(iCalJson);
-          print(cal.latitude);print(cal.longitude);print(cal.summary);
-          // final path = await _localPath;
-          // parseIcsFile('assets/calendar2.ics');
-          },
-          child: const Text('Test iCal!'),
-        ),]
-      ),
-      
-    );
-  }
-}
+END:VCALENDAR
+""";
+  String icalInput2 =
+"""BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//hacksw/handcal//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+CREATED:19960329T133000Z
+UID:uid1@example.com
+DTSTAMP:19970714T170000Z
+ORGANIZER;CN=John Doe:MAILTO:john.doe@example.com
+DTSTART:20230520T170000Z
+DTEND:20230520T185959Z
+SUMMARY:Bastille Day Party
+GEO:48.85299;2.36885
+END:VEVENT
+END:VCALENDAR
+""";
+  String icalInput3 =
+"""BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//hacksw/handcal//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+CREATED:19960329T133000Z
+UID:uid1@example.com
+DTSTAMP:19970714T170000Z
+ORGANIZER;CN=John Doe:MAILTO:john.doe@example.com
+DTSTART:20230519T170000Z
+DTEND:20230519T185959Z
+SUMMARY:Bastille Day Party
+GEO:48.85299;2.36885
+END:VEVENT
+END:VCALENDAR
+"""; 
 
 
-class Cal {
-  final double latitude;
-  final double longitude;
-  final String summary;
-
-  const Cal({
-    required this.summary,
-    required this.latitude,
-    required this.longitude,
-  });
-
-  factory Cal.fromJson(Map<String, dynamic> json) {
-    return Cal(
-      summary: json['data'][0]['summary'] as String,
-      latitude: json['data'][0]['geo']['latitude'] as double,
-      longitude: json['data'][0]['geo']['longitude'] as double
-    );
-  }
-}
+// ------------------------- Update ------------------------ 

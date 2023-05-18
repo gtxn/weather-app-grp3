@@ -26,11 +26,12 @@ Functionality Done
 final myController = TextEditingController();
 
 ## Parser of iCal
-1. iCal parsing has been integrated in Submit button!
-2. Add several util functions
-3. Current Time stamp done! 20230518T225557Z 
-4. Read from str to json
-5. String filter and time sorting
+iCal parsing HAS BEEN ALREADY integrated in Submit button!
+1. After Clicking the submit button a list of sorted and filtered Calendar objects will be generated for future used.
+1. Add several util functions
+2. Current Time stamp done! 20230518T225557Z 
+3. Read from str to json
+4. String filter and time sorting
  
 ## Reference
 switch between the page https://docs.flutter.dev/cookbook/navigation/navigation-basics

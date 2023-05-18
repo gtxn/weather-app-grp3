@@ -32,3 +32,9 @@ switch between the page https://docs.flutter.dev/cookbook/navigation/navigation-
 Text input box https://docs.flutter.dev/cookbook/forms/text-input
 
 Retrieve the input https://docs.flutter.dev/cookbook/forms/retrieve-input
+
+icalendar parser
+https://pub.dev/packages/icalendar_parser
+
+
+https://dart.dev/language/records#record-fields

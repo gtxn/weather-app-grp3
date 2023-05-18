@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -132,21 +133,23 @@ class MyApp extends StatelessWidget {
         );
   }
 }
-Future<void> parseIcsFile(String filePath) async {
-    final lines = await File(filePath).readAsLines();
+// Future<void> parseIcsFile(String filePath) async {
+//     final lines = await File(filePath).readAsLines();
  
-    final json = ICalendar.fromLines(lines).toJson();
-    final buffer = StringBuffer('File: $filePath\n');
-    final prettyprint = const JsonEncoder.withIndent('  ').convert(json);
-    buffer.writeln(prettyprint);
-    print(buffer.toString());
-  }
+//     final json = ICalendar.fromLines(lines).toJson();
+//     final buffer = StringBuffer('File: $filePath\n');
+//     final prettyprint = const JsonEncoder.withIndent('  ').convert(json);
+//     buffer.writeln(prettyprint);
+//     print(buffer.toString());
+//   }
 // Future<String> get _localPath async {
 //     final directory = await getApplicationDocumentsDirectory();
  
 //     return directory.path;
 //   }
 // DEMO Page
+
+
 class SecondRoute extends StatelessWidget {
   const SecondRoute({super.key});
   
@@ -167,18 +170,35 @@ class SecondRoute extends StatelessWidget {
         ),
 
         ElevatedButton(
-          onPressed: () async {
-      
+          onPressed: ()  {
+        String icalInput =
+        """BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//hacksw/handcal//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+CREATED:19960329T133000Z
+UID:uid1@example.com
+DTSTAMP:19970714T170000Z
+ORGANIZER;CN=John Doe:MAILTO:john.doe@example.com
+DTSTART:19970714T170000Z
+DTEND:19970715T035959Z
+SUMMARY:Bastille Day Party
+GEO:48.85299;2.36885
+END:VEVENT
+END:VCALENDAR""";
+          final iCalendar = ICalendar.fromString(icalInput);
+          print(iCalendar);
+          print(iCalendar.toJson());
+          final iCalJson=iCalendar.toJson();
+          Cal cal=Cal.fromJson(iCalJson);
+          print(cal.latitude);print(cal.longtitude);print(cal.summary);
           // final path = await _localPath;
-          parseIcsFile('lib/calendar.ics');
-
+          // parseIcsFile('assets/calendar2.ics');
           },
           child: const Text('Test iCal!'),
-          
         ),]
-
-
-        
       ),
       
     );
@@ -186,3 +206,22 @@ class SecondRoute extends StatelessWidget {
 }
 
 
+class Cal {
+  final Float latitude;
+  final Float longtitude;
+  final String summary;
+
+  const Cal({
+    required this.summary,
+    required this.latitude,
+    required this.longtitude,
+  });
+
+  factory Cal.fromJson(Map<String, dynamic> json) {
+    return Cal(
+      summary: json['summary'] as String,
+      latitude: json['geo']['latitude'] as Float,
+      longtitude: json['geo']['longtitude'] as Float
+    );
+  }
+}

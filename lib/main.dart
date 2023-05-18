@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MyApp());
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
       ),
     );
 
+    var now = DateTime.now();
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -61,16 +63,73 @@ class MyApp extends StatelessWidget {
           // Notice that the counter didn't reset back to zero; the application
           // is not restarted.
           primarySwatch: Colors.blue,
+          useMaterial3: true,
         ),
         home: Scaffold(
-            appBar: AppBar(
-              title: const Text('Flutter layout demo'),
-            ),
-            body: Column(
-              children: [
-                titleSection,
-              ],
-            ))
+          body: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 50.0),
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 100),
+                child: Column(
+                  children: [
+                    Text(
+                      DateFormat('dd/MM/yy').format(now),
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    Text(
+                      DateFormat.E().format(now),
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    Stack(
+                      children: [
+                        Center(
+                          child: Text(
+                            "18º",
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.displayLarge,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              IconButton.filledTonal(
+                                // heroTag: "topWeather",
+                                onPressed: () => {},
+                                icon: const Icon(Icons.sunny),
+                              ),
+                              IconButton.filledTonal(
+                                // heroTag: "botWeather",
+                                onPressed: () => {},
+                                icon: const Icon(Icons.air),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              const Divider(),
+              ...ListTile.divideTiles(context: context, tiles: [
+                ListTile(
+                  title: Text(
+                    "time of next rain",
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  trailing: Text(
+                    "10am",
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                ),
+              ]),
+            ],
+          ),
+        )
         // const MyHomePage(title: 'Flutter Demo Home Page'),
         );
   }

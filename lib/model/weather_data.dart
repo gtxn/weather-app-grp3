@@ -4,4 +4,6 @@ class WeatherData {
   final WeatherDataGeneral? general;
 
   WeatherData([this.general]);
+
+  WeatherDataGeneral getGeneralWeatherData() => general!;
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
-import 'package:weather_app/controller/location_controller.dart';
+import 'package:weather_app/controller/global_controller.dart';
 
 class HeaderWidget extends StatefulWidget {
   const HeaderWidget({super.key});
@@ -12,14 +12,13 @@ class HeaderWidget extends StatefulWidget {
 
 class _HeaderWidgetState extends State<HeaderWidget> {
   String city = "";
-  final LocationController locationController =
-      Get.put(LocationController(), permanent: true);
+  final GlobalController globalController =
+      Get.put(GlobalController(), permanent: true);
 
   @override
   void initState() {
-    getAddress(locationController.getLatitude().value,
-        locationController.getLongitude().value);
-    // getAddress(52.0, 0.1);
+    getAddress(globalController.getLatitude().value,
+        globalController.getLongitude().value);
     super.initState();
   }
 
@@ -31,7 +30,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
 
     print(place);
     setState(() {
-      city = place.name!;
+      city = place.subAdministrativeArea!;
     });
   }
 

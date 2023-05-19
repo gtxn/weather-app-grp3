@@ -5,7 +5,7 @@ import 'package:weather_app/model/weather_data.dart';
 
 import '../api/fetch_weather.dart';
 
-class LocationController extends GetxController {
+class GlobalController extends GetxController {
   final RxBool _isLoading = true.obs;
   final RxDouble _latitude = 0.0.obs;
   final RxDouble _longitude = 0.0.obs;
@@ -15,6 +15,10 @@ class LocationController extends GetxController {
   RxDouble getLongitude() => _longitude;
 
   final weatherData = WeatherData().obs;
+
+  WeatherData getData() {
+    return weatherData.value;
+  }
 
   @override
   void onInit() {

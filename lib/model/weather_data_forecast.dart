@@ -1,18 +1,19 @@
 import 'weather_raw/temp.dart';
 import 'weather_raw/weather.dart';
 
-class Daily {
+class WeatherDataForecast {
   int? dt;
   Temp? temp;
   List<Weather>? weather;
 
-  Daily({
+  WeatherDataForecast({
     this.dt,
     this.temp,
     this.weather,
   });
 
-  factory Daily.fromJson(Map<String, dynamic> json) => Daily(
+  factory WeatherDataForecast.fromJson(Map<String, dynamic> json) =>
+      WeatherDataForecast(
         dt: json['dt'] as int?,
         temp: json['temp'] == null
             ? null

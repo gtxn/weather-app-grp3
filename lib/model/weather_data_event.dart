@@ -1,19 +1,20 @@
 import 'weather_raw/weather.dart';
 
-class Hourly {
+class WeatherDataEvent {
   int? dt;
   double? temp;
   double? feelsLike;
   List<Weather>? weather;
 
-  Hourly({
+  WeatherDataEvent({
     this.dt,
     this.temp,
     this.feelsLike,
     this.weather,
   });
 
-  factory Hourly.fromJson(Map<String, dynamic> json) => Hourly(
+  factory WeatherDataEvent.fromJson(Map<String, dynamic> json) =>
+      WeatherDataEvent(
         dt: json['dt'] as int?,
         temp: (json['temp'] as num?)?.toDouble(),
         feelsLike: (json['feels_like'] as num?)?.toDouble(),

@@ -17,7 +17,7 @@ void main() {
 
 //input text box (iCal link from user, global var)
 final myController = TextEditingController();
-
+List<Cal> calendarFiltered=[];
 class MyApp extends StatelessWidget {
  const  MyApp({super.key});
   // This widget is the root of your application.
@@ -87,15 +87,8 @@ class MyApp extends StatelessWidget {
               );
             },
           );
-           // ------------------------- Update ------------------------ 
-            // Usage of the calendarFiltered
-            List<Cal> calendarFiltered=getCal();
-           
-            // Unit test for getCal();
-            for(int i=0;i<calendarFiltered.length;i++){
-              calendarFiltered[i].printClassForDebug();
-            }
-
+           // ------------------------- Update -----------------------
+            getCalAsync();
             // ------------------------- Update ------------------------ 
           },
             child: const Text('Submit'),
@@ -193,33 +186,36 @@ class SecondRoute extends StatelessWidget {
 
 // ------------------------- Update ------------------------ 
 class Cal {
-  final double latitude;
-  final double longitude;
+  // final double latitude;
+  // final double longitude;
   final String summary;
+  final String timeZone;
   final String startTime;
   final String endTime;
 
   const Cal({
+    // required this.latitude,
+    // required this.longitude,
     required this.summary,
-    required this.latitude,
-    required this.longitude,
     required this.startTime,
     required this.endTime,
+    required this.timeZone
 
   });
     
     factory Cal.fromJson(Map<String, dynamic> json) {
     return Cal(
       summary: json['summary'] as String,
-      latitude: json['geo']['latitude'] as double,
-      longitude: json['geo']['longitude'] as double,
+      // latitude: json['geo']['latitude'] as double,
+      // longitude: json['geo']['longitude'] as double,
+      timeZone: json['dtstart']['tzid'] as String,
       startTime: json['dtstart']['dt'] as String,
       endTime: json['dtend']['dt'] as String
     );  
   }
 
   void printClassForDebug(){
-        print(latitude);print(longitude);print(summary);
+        print(timeZone);print(summary);
         print(startTime);print(endTime);
   }
 }
@@ -242,28 +238,48 @@ String iCalStr = "";
 String inputlink=myController.text;
 
 // get the full list of filtered and sorted Calendar objects from [] to pretty much a lot!
-List<Cal> getCal(){
+void getCalAsync() async{
+    calendarFiltered= await getCal();
+    print(calendarFiltered);
+    for(int i=0;i<min(calendarFiltered.length,10);i++){
+        calendarFiltered[i].printClassForDebug();
+    }
+}
+Future<List<Cal>> getCal(){
  // print(currentTimeStampiCal());
-  List<Cal> calendarFiltered=[];
   ICalendar iCalendar;
-  fetchIcal.fetch(inputlink).then((String result){
+  var calendarFiltered=fetchIcal.fetch(inputlink).then((String result){
       // print(result);
+      List<Cal> calendarFiltered=[];
       iCalStr = result;
       iCalendar = ICalendar.fromString(iCalStr);
- 
-  // // addCalToList(icalInput,calendarFiltered);
-  // final iCalendar = ICalendar.fromString(iCalStr);
 
   final iCalJson=iCalendar.toJson();
-  print(iCalJson);
+  // print(iCalJson);
   // print(iCalJson['data']);
   // print(iCalJson['data'].length);
-  for(int i=0;i<min(iCalJson['data'].length,10);i++){
-        Cal cal=Cal.fromJson(iCalJson['data'][i]);
-        if(cal.startTime.compareTo(currentTimeStampiCal())==1){ 
-          calendarFiltered.add(cal);
+  for(int i=0;i<iCalJson['data'].length;i++){
+        // print(iCalJson['data'][i]['type']);
+
+        if(iCalJson['data'][i]['type']!='VEVENT'){
+            continue;
         }
+        // print(iCalJson['data'][i]['summary']);
+        // print(iCalJson['data'][i]['dtstart']['tzid']);
+        // print(iCalJson['data'][i]['dtstart']['dt']);
+        // print(iCalJson['data'][i]['dtend']['dt']);
+      
+        Cal cal=Cal.fromJson(iCalJson['data'][i]);
+        //cal.printClassForDebug();
+      
+        if(cal.startTime.compareTo(currentTimeStampiCal())==1){ 
+            calendarFiltered.add(cal);
+            // cal.printClassForDebug();
+        }  
+       
   }
+  calendarFiltered.sort((a, b) => a.startTime.compareTo(b.startTime));
+  return calendarFiltered;
    // print(calendarFiltered.length);
   // calendarFiltered.sort((a, b) => a.startTime.compareTo(b.startTime));
   });

@@ -1,10 +1,11 @@
-import 'dart:convert';
-import 'dart:ffi';
-import 'dart:io';
+
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:icalendar_parser/icalendar_parser.dart';
-import  'package:intl/intl.dart';
+import 'package:intl/intl.dart';
+
+import 'fetch_ical.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -13,6 +14,8 @@ void main() {
   ));
   
 }
+
+//input text box (iCal link from user, global var)
 final myController = TextEditingController();
 
 class MyApp extends StatelessWidget {
@@ -87,9 +90,12 @@ class MyApp extends StatelessWidget {
            // ------------------------- Update ------------------------ 
             // Usage of the calendarFiltered
             List<Cal> calendarFiltered=getCal();
+           
+            // Unit test for getCal();
             for(int i=0;i<calendarFiltered.length;i++){
               calendarFiltered[i].printClassForDebug();
             }
+
             // ------------------------- Update ------------------------ 
           },
             child: const Text('Submit'),
@@ -213,11 +219,13 @@ class Cal {
   }
 
   void printClassForDebug(){
-        print(this.latitude);print(this.longitude);print(this.summary);
-        print(this.startTime);print(this.endTime);
+        print(latitude);print(longitude);print(summary);
+        print(startTime);print(endTime);
   }
 }
-// Util function:
+
+
+//---------------------------- Util function:---------------------------
 String currentTimeStampiCal()
 {
     // String datetime = DateTime.now().toString();
@@ -226,31 +234,39 @@ String currentTimeStampiCal()
     // print(cdate);
     String tdata = DateFormat("HHmmss").format(DateTime.now());
     // print(tdata);
-    String fullTime=cdate+'T'+tdata+'Z';
+    String fullTime='${cdate}T$tdata';
     // print(fullTime);
     return fullTime;
 }
+String iCalStr = "";
+String inputlink=myController.text;
 
 // get the full list of filtered and sorted Calendar objects from [] to pretty much a lot!
 List<Cal> getCal(){
  // print(currentTimeStampiCal());
   List<Cal> calendarFiltered=[];
+  ICalendar iCalendar;
+  fetchIcal.fetch(inputlink).then((String result){
+      // print(result);
+      iCalStr = result;
+      iCalendar = ICalendar.fromString(iCalStr);
+ 
+  // // addCalToList(icalInput,calendarFiltered);
+  // final iCalendar = ICalendar.fromString(iCalStr);
 
-  // addCalToList(icalInput,calendarFiltered);
-  final iCalendar = ICalendar.fromString(icalInput);
   final iCalJson=iCalendar.toJson();
+  print(iCalJson);
   // print(iCalJson['data']);
   // print(iCalJson['data'].length);
-  for(int i=0;i<iCalJson['data'].length;i++){
+  for(int i=0;i<min(iCalJson['data'].length,10);i++){
         Cal cal=Cal.fromJson(iCalJson['data'][i]);
         if(cal.startTime.compareTo(currentTimeStampiCal())==1){ 
           calendarFiltered.add(cal);
         }
   }
- 
    // print(calendarFiltered.length);
   // calendarFiltered.sort((a, b) => a.startTime.compareTo(b.startTime));
-
+  });
   return calendarFiltered;
 }
 // Sample iCal input string

@@ -1,0 +1,13 @@
+{ version: 2.0, prodid: -//kudos.voidstar.org.uk//NONSGML KuDoSv10.1//EN, data: 
+
+[{type: DAYLIGHT, dtstart: {dt: 19700329T010000}, rrule: FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU},
+ {type: STANDARD, dtstart: {dt: 19701025T020000}, rrule: FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU}, 
+ {type: VTIMEZONE}, 
+ {type: VEVENT, status: CONFIRMED, uid: kudos.voidstar.org.uk-lecture-CST Part IA--2022-MICHAELMAS-Databases#1, 
+ dtstamp: {dt: 20221011T110000, tzid: Europe/London}, 
+ dtstart: {dt: 20221011T110000, tzid: Europe/London}, 
+ dtend: {dt: 20221011T120000, tzid: Europe/London}, 
+ summary: Lecture: Databases #1, location: Lecture Theatre 1, 
+ William Gates Building, organizer: 
+ {name: DR D. J. GREAVES, mail: mailto:kudos@chu.cam.ac.uk}}]
+}

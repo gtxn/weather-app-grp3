@@ -25,6 +25,8 @@ Functionality Done
 final myController = TextEditingController();
 
 ## Parser of iCal
+Calendar event: We could also add other fields ( location and etc.)
+
 iCal parsing HAS BEEN ALREADY integrated in Submit button!
 1. After Clicking the submit button a list of sorted and filtered Calendar objects will be generated for future used.
 1. Add several util functions
@@ -32,6 +34,16 @@ iCal parsing HAS BEEN ALREADY integrated in Submit button!
 3. Read from str to json
 4. String filter and time sorting
  
+List<Cal> calendarFiltered;  // A list of Cal objects, sorted and filtered. 
+
+The number is not restricted to 3, if you want a part of it, plz use
+```
+for(int i=0;i<min(calendarFiltered.length,3);i++)
+{        
+  calendarFiltered[i].printClassForDebug(); 
+}
+```
+
 ## Reference
 switch between the page https://docs.flutter.dev/cookbook/navigation/navigation-basics
 

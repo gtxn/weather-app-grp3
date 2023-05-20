@@ -230,7 +230,20 @@ String currentTimeStampiCal()
     // print(fullTime);
     return fullTime;
 }
-
+// Cal strToCalendarClass(String icalInput){
+//     final iCalendar = ICalendar.fromString(icalInput);
+//     // print(iCalendar);
+  
+//     // print(iCalendar.toJson());
+//     final iCalJson=iCalendar.toJson();
+//     print(iCalJson);
+//     // final list = List<Cal>.from(iCalJson.map((x) => Cal.fromJson(x)));
+//       //  print(list);
+      
+//     Cal cal=Cal.fromJson(iCalJson);
+//     return cal;
+// }
+ 
 // get the full list of filtered and sorted Calendar objects from [] to pretty much a lot!
 List<Cal> getCal(){
  // print(currentTimeStampiCal());
@@ -239,21 +252,31 @@ List<Cal> getCal(){
   // addCalToList(icalInput,calendarFiltered);
   final iCalendar = ICalendar.fromString(icalInput);
   final iCalJson=iCalendar.toJson();
-  // print(iCalJson['data']);
-  // print(iCalJson['data'].length);
+  print(iCalJson['data']);
+  print(iCalJson['data'].length);
   for(int i=0;i<iCalJson['data'].length;i++){
         Cal cal=Cal.fromJson(iCalJson['data'][i]);
-        if(cal.startTime.compareTo(currentTimeStampiCal())==1){ 
+         if(cal.startTime.compareTo(currentTimeStampiCal())==1){ 
           calendarFiltered.add(cal);
-        }
+       }
   }
- 
-   // print(calendarFiltered.length);
+  // addCalToList(icalInput2,calendarFiltered);
+  // addCalToList(icalInput3,calendarFiltered);
+
+  // print(calendarFiltered.length);
   // calendarFiltered.sort((a, b) => a.startTime.compareTo(b.startTime));
 
   return calendarFiltered;
 }
-// Sample iCal input string
+
+// void addCalToList(String calStr,List<Cal> calendarFiltered){
+//       Cal cal=strToCalendarClass(calStr);
+//         // cal.printClassForDebug();
+//       if(cal.startTime.compareTo(currentTimeStampiCal())==1){ 
+//           calendarFiltered.add(cal);
+//       }
+// }
+
 String icalInput =
 """BEGIN:VCALENDAR
 VERSION:2.0

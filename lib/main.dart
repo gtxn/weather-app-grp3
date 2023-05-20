@@ -181,7 +181,12 @@ class _MainPageState extends State<MainPage> {
                         alignment: Alignment.centerRight,
                         child: FloatingActionButton(
                           // heroTag: "topWeather",
-                          onPressed: toggleWeatherModalOpen,
+                          onPressed: () => showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  WeatherOverlay(toggleOpen: () {
+                                    Navigator.pop(context);
+                                  })),
                           child: const Icon(Icons.sunny),
                         ),
                       )
@@ -216,10 +221,10 @@ class _MainPageState extends State<MainPage> {
             ]),
           ],
         ),
-        WeatherOverlay(
-            key: const Key('overlayModal'),
-            isVisible: isWeatherModalOpen,
-            toggleOpen: toggleWeatherModalOpen)
+        // WeatherOverlay(
+        //     key: const Key('overlayModal'),
+        //     isVisible: isWeatherModalOpen,
+        //     toggleOpen: toggleWeatherModalOpen)
       ],
     );
   }

@@ -18,6 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
       Get.put(GlobalController(), permanent: true);
   @override
   Widget build(BuildContext context) {
+    globalController.getIcalLink(
+        "https://kudos.chu.cam.ac.uk/kudos/rest/iCal?authuser=yg410&authsecret=d9d12e46-8db5-42f5-9e12-f20910318a96");
     return Scaffold(
         body: SafeArea(
       child: Obx(() => globalController.checkLoading().isTrue

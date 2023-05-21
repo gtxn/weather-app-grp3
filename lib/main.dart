@@ -4,9 +4,6 @@ import 'package:weather_app/assets/Constants.dart';
 import 'package:weather_app/components/MainDisplay/EventComponent.dart';
 import 'package:weather_app/components/MainDisplay/NextRainComponent.dart';
 import 'package:weather_app/components/MainDisplay/WeatherDisplayComponent.dart';
-import 'components/ListTitleText.dart';
-import 'components/WeatherOverlay.dart';
-import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +16,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    const Widget home = MainPage(title: 'test');
+    Widget home = MainPage();
 
     return MaterialApp(
         title: 'Flutter Demo',
@@ -51,30 +48,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MainPage> createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  bool isWeatherModalOpen = false;
-  bool isWindModalOpen = false;
-
-  void toggleWeatherModalOpen() {
-    setState(() {
-      isWeatherModalOpen = !isWeatherModalOpen;
-    });
-  }
-
-  void toggleWindModalOpen() {
-    setState(() {
-      isWindModalOpen = !isWindModalOpen;
-    });
-  }
+class MainPage extends StatelessWidget {
+  const MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {

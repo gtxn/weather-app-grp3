@@ -190,7 +190,11 @@ class _MainPageState extends State<MainPage> {
                             'weather': 1
                           })));
                     } else {
-                      return const CircularProgressIndicator();
+                      return Center(
+                        child: Container(
+                            padding: const EdgeInsets.all(10.0),
+                            child: const CircularProgressIndicator()),
+                      );
                     }
                   })
             ]),

@@ -9,6 +9,9 @@ import 'package:icalendar_parser/icalendar_parser.dart';
 import 'package:intl/intl.dart';
 
 import 'fetch_ical.dart';
+import 'package:weather_app/components/MainDisplay/EventComponent.dart';
+import 'package:weather_app/components/MainDisplay/NextRainComponent.dart';
+import 'package:weather_app/components/MainDisplay/WeatherDisplayComponent.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -114,6 +117,27 @@ class PeterPage extends StatelessWidget {
   }
 }
 
+class SecondRoute extends StatelessWidget {
+  const SecondRoute({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Second Page (Demo)'),
+      ),
+      body: Column(children: [
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Go back!'),
+        ),
+      ]),
+    );
+  }
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   static Constants style = Constants();
@@ -121,9 +145,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    const Widget home = MainPage(title: 'test');
-
-    var now = DateTime.now();
+    Widget home = MainPage();
 
     return MaterialApp(
         title: 'Calendar Sync',
@@ -133,15 +155,25 @@ class MyApp extends StatelessWidget {
             textTheme: GoogleFonts.latoTextTheme(
               Theme.of(context).textTheme.copyWith(
                     bodyLarge: TextStyle(color: style.primary[50]),
+                    bodyMedium: TextStyle(color: style.primary[50]),
+                    displayLarge: TextStyle(
+                      color: style.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    displayMedium: TextStyle(
+                      color: style.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    titleLarge: TextStyle(color: style.white),
+                    titleMedium: TextStyle(color: style.white),
+                    titleSmall: TextStyle(color: style.white),
                   ),
             )),
         home: Scaffold(
             appBar: AppBar(
               title: const Text('Calendar Sync'),
             ),
-            body: home)
-        // const MyHomePage(title: 'Flutter Demo Home Page'),
-        );
+            body: home));
   }
 }
 // Future<void> parseIcsFile(String filePath) async {
@@ -160,138 +192,47 @@ class MyApp extends StatelessWidget {
 //   }
 // DEMO Page
 
-class DronPage extends StatelessWidget {
-  const DronPage({super.key});
+class MainPage extends StatelessWidget {
+  const MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     var now = DateTime.now();
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 50.0),
+    return Stack(
       children: [
-        Container(
-          padding: const EdgeInsets.fromLTRB(0, 150, 0, 50),
-          child: Column(
-            children: [
-              Text(
-                DateFormat('dd/MM/yy').format(now),
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              Text(
-                DateFormat.E().format(now),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              Stack(
-                children: [
-                  Center(
-                    child: Text(
-                      "18º",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.displayLarge,
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: FloatingActionButton(
-                      // heroTag: "topWeather",
-                      onPressed: () => {},
-                      child: const Icon(Icons.sunny),
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
+        ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 50.0),
+          children: [
+            WeatherDisplayComponent(now),
+            const Divider(),
+            ...ListTile.divideTiles(context: context, tiles: [
+              NextRainComponent(now),
+              EventComponent([
+                {
+                  'title': 'event1',
+                  'time': DateTime.parse('20230521 10:30'),
+                  'weather': 1,
+                },
+                {
+                  'title': 'event2',
+                  'time': DateTime.parse('20230521 12:30'),
+                  'weather': 1,
+                },
+                {
+                  'title': 'event3',
+                  'time': DateTime.parse('20230521 14:30'),
+                  'weather': 0,
+                },
+                {
+                  'title': 'event4',
+                  'time': DateTime.parse('20230521 17:30'),
+                  'weather': 0,
+                },
+              ])
+            ]),
+          ],
         ),
-        const Divider(),
-        ...ListTile.divideTiles(context: context, tiles: [
-          const ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            title: ListTitleText(title: "time of next rain"),
-            trailing: ListTitleText(title: "10am"),
-          ),
-          ExpansionTile(
-            title: const ListTitleText(title: "Next event 1"),
-            children: [
-              ...[for (var i = 2; i <= 10; i++) i].map((e) => ListTile(
-                    title: ListTitleText(title: "Next event $e"),
-                  )),
-              Builder(builder: (BuildContext context) {
-                return IconButton.filled(
-                    onPressed: () {
-                      return ExpansionTileController.of(context).collapse();
-                    },
-                    icon: const Icon(Icons.arrow_drop_up));
-              })
-            ],
-          )
-        ]),
       ],
-    );
-  }
-}
-
-class ListTitleText extends StatelessWidget {
-  const ListTitleText({super.key, required this.title});
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: Theme.of(context).textTheme.headlineSmall,
-    );
-  }
-}
-
-class MainPage extends StatefulWidget {
-  const MainPage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MainPage> createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  bool isWeatherModalOpen = false;
-  bool isWindModalOpen = false;
-
-  void toggleWeatherModalOpen() {
-    setState(() {
-      isWeatherModalOpen = !isWeatherModalOpen;
-    });
-  }
-
-  void toggleWindModalOpen() {
-    setState(() {
-      isWindModalOpen = !isWindModalOpen;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return const DronPage();
-  }
-}
-
-class SecondRoute extends StatelessWidget {
-  const SecondRoute({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Second Page (Demo)'),
-      ),
-      body: Column(children: [
-        ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Go back!'),
-        ),
-      ]),
     );
   }
 }

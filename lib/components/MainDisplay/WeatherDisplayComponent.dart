@@ -4,9 +4,10 @@ import 'package:intl/intl.dart';
 import '../WeatherOverlay.dart';
 
 class WeatherDisplayComponent extends StatelessWidget {
-  const WeatherDisplayComponent(this.now, {super.key});
+  const WeatherDisplayComponent(this.now, this.temp, {super.key});
 
   final DateTime now;
+  final double temp;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class WeatherDisplayComponent extends StatelessWidget {
             children: [
               Center(
                 child: Text(
-                  "18º",
+                  "${temp.toStringAsFixed(0)}º",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.displayLarge,
                 ),

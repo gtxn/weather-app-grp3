@@ -226,7 +226,10 @@ class _MainPageState extends State<MainPage> {
             WeatherDisplayComponent(now, asyncWeather),
             const Divider(),
             ...ListTile.divideTiles(context: context, tiles: [
-              NextRainComponent(now),
+              NextRainComponent(
+                now,
+                weather: asyncWeather,
+              ),
               FutureBuilder<List<Cal>>(
                   future: futureFilteredCal,
                   builder: (context, snapshot) {

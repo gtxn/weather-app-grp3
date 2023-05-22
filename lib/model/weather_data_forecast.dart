@@ -1,23 +1,32 @@
-import 'weather_raw/temp.dart';
 import 'weather_raw/weather.dart';
 
 class WeatherDataForecast {
-  int? dt;
-  Temp? temp;
-  List<Weather>? weather;
-
-  WeatherDataForecast({
-    this.dt,
-    this.temp,
-    this.weather,
-  });
+  final List<Hourly> hourly;
+  WeatherDataForecast({required this.hourly});
 
   factory WeatherDataForecast.fromJson(Map<String, dynamic> json) =>
       WeatherDataForecast(
+          hourly:
+              List<Hourly>.from(json['hourly'].map((e) => Hourly.fromJson(e))));
+}
+
+class Hourly {
+  int? dt;
+  double? temp;
+  double? feelsLike;
+  List<Weather>? weather;
+
+  Hourly({
+    this.dt,
+    this.temp,
+    this.feelsLike,
+    this.weather,
+  });
+
+  factory Hourly.fromJson(Map<String, dynamic> json) => Hourly(
         dt: json['dt'] as int?,
-        temp: json['temp'] == null
-            ? null
-            : Temp.fromJson(json['temp'] as Map<String, dynamic>),
+        temp: (json['temp'] as num?)?.toDouble(),
+        feelsLike: (json['feels_like'] as num?)?.toDouble(),
         weather: (json['weather'] as List<dynamic>?)
             ?.map((e) => Weather.fromJson(e as Map<String, dynamic>))
             .toList(),
@@ -25,7 +34,8 @@ class WeatherDataForecast {
 
   Map<String, dynamic> toJson() => {
         'dt': dt,
-        'temp': temp?.toJson(),
+        'temp': temp,
+        'feels_like': feelsLike,
         'weather': weather?.map((e) => e.toJson()).toList(),
       };
 }

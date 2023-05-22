@@ -223,20 +223,7 @@ class _MainPageState extends State<MainPage> {
         ListView(
           padding: const EdgeInsets.symmetric(horizontal: 50.0),
           children: [
-            FutureBuilder(
-                future: asyncWeather,
-                builder: ((context, snapshot) {
-                  if (snapshot.hasData) {
-                    return WeatherDisplayComponent(
-                        now, snapshot.data!.general!.current);
-                  } else {
-                    return Center(
-                      child: Container(
-                          padding: const EdgeInsets.all(10.0),
-                          child: const CircularProgressIndicator()),
-                    );
-                  }
-                })),
+            WeatherDisplayComponent(now, asyncWeather),
             const Divider(),
             ...ListTile.divideTiles(context: context, tiles: [
               NextRainComponent(now),

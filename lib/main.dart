@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/api/fetch_weather.dart';
@@ -10,7 +9,6 @@ import 'package:weather_app/calendar_ops.dart';
 import 'package:weather_app/components/MainDisplay/EventComponent.dart';
 import 'package:weather_app/components/MainDisplay/NextRainComponent.dart';
 import 'package:weather_app/components/MainDisplay/WeatherDisplayComponent.dart';
-import 'package:weather_app/controller/global_controller.dart';
 import 'package:weather_app/model/weather_data.dart';
 
 void main() {
@@ -230,7 +228,7 @@ class _MainPageState extends State<MainPage> {
                 builder: ((context, snapshot) {
                   if (snapshot.hasData) {
                     return WeatherDisplayComponent(
-                        now, snapshot.data!.general!.current!);
+                        now, snapshot.data!.general!.current);
                   } else {
                     return Center(
                       child: Container(
@@ -246,13 +244,7 @@ class _MainPageState extends State<MainPage> {
                   future: futureFilteredCal,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return EventComponent(List.from(snapshot.data!.map((e) =>
-                          // need to use List.from to get a List rather than an iterable
-                          {
-                            'title': e.summary,
-                            'time': DateTime.parse(e.startTime),
-                            'weather': 1
-                          })));
+                      return EventComponent(snapshot.data!, asyncWeather);
                     } else {
                       return Center(
                         child: Container(

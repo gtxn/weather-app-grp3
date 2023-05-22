@@ -229,8 +229,8 @@ class _MainPageState extends State<MainPage> {
                 future: asyncWeather,
                 builder: ((context, snapshot) {
                   if (snapshot.hasData) {
-                    return WeatherDisplayComponent(now,
-                        snapshot.data!.general!.current.feelsLike! - 273.15);
+                    return WeatherDisplayComponent(
+                        now, snapshot.data!.general!.current!);
                   } else {
                     return Center(
                       child: Container(

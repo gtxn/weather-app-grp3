@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'package:weather_app/model/weather_data_event.dart';
+import 'package:weather_app/model/weather_data_forecast.dart';
+
 import 'api_key.dart';
 import 'package:weather_app/model/weather_data.dart';
 import 'package:http/http.dart' as http;
@@ -10,7 +13,10 @@ class FetchWeatherAPI {
   Future<WeatherData> processWeatherData(latitude, longitude) async {
     var response = await http.get(Uri.parse(apiURL(latitude, longitude)));
     var jsonData = jsonDecode(response.body);
-    weatherData = WeatherData(WeatherDataGeneral.fromJson(jsonData));
+    weatherData = WeatherData(
+        WeatherDataGeneral.fromJson(jsonData),
+        WeatherDataForecast.fromJson(jsonData),
+        WeatherDataEvent.fromJson(jsonData));
     return weatherData!;
   }
 }

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_app/model/weather_data_general.dart';
 
 import '../WeatherOverlay.dart';
 
 class WeatherDisplayComponent extends StatelessWidget {
-  const WeatherDisplayComponent(this.now, this.temp, {super.key});
+  const WeatherDisplayComponent(this.now, this.currentWeather, {super.key});
 
   final DateTime now;
-  final double temp;
+  final Current currentWeather;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class WeatherDisplayComponent extends StatelessWidget {
             children: [
               Center(
                 child: Text(
-                  "${temp.toStringAsFixed(0)}º",
+                  "${(currentWeather.feelsLike! - 273.15).toStringAsFixed(0)}º",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.displayLarge,
                 ),
@@ -42,7 +43,8 @@ class WeatherDisplayComponent extends StatelessWidget {
                           WeatherOverlay(toggleOpen: () {
                             Navigator.pop(context);
                           })),
-                  child: const Icon(Icons.sunny),
+                  child: ImageIcon(AssetImage(
+                      "lib/assets/${currentWeather.weather![0].icon}.png")),
                 ),
               )
             ],

@@ -62,13 +62,14 @@ class EventBlock extends StatelessWidget {
                         DateTime.fromMillisecondsSinceEpoch(element.dt! * 1000);
                     return eventTime.isBefore(hourlyWeatherTime);
                   });
-                  if (hourly.isEmpty) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                  if (hourly.isNotEmpty) {
+                    return TempWeatherRect(
+                        temp: hourly.first.feelsLike! - 273.15,
+                        icon: hourly.first.weather![0].icon!);
                   }
-                  return ImageIcon(AssetImage(
-                      "lib/assets/${hourly.first.weather![0].icon}.png"));
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
                 return const Center(
                   child: CircularProgressIndicator(),
@@ -77,5 +78,24 @@ class EventBlock extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+// creds to jeremiah
+class TempWeatherRect extends StatelessWidget {
+  final double temp;
+  final String icon;
+  const TempWeatherRect({super.key, required this.temp, required this.icon});
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        color: Theme.of(context).colorScheme.surfaceVariant,
+        child: Center(
+            child: Row(
+          children: [
+            ImageIcon(AssetImage("lib/assets/$icon.png")),
+            Text("${temp.toStringAsFixed(0)}°", textAlign: TextAlign.center)
+          ],
+        )));
   }
 }

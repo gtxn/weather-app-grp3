@@ -1,11 +1,182 @@
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:weather_app/api/fetch_weather.dart';
 import 'package:weather_app/assets/Constants.dart';
-import 'components/WeatherOverlay.dart';
-import 'package:intl/intl.dart';
+import 'package:weather_app/calendar_ops.dart';
+
+import 'package:weather_app/components/MainDisplay/EventComponent.dart';
+import 'package:weather_app/components/MainDisplay/NextRainComponent.dart';
+import 'package:weather_app/components/MainDisplay/WeatherDisplayComponent.dart';
+import 'package:weather_app/model/weather_data.dart';
 
 void main() {
   runApp(const MyApp());
+}
+
+//input text box (iCal link from user, global var)
+final myController = TextEditingController();
+List<Cal> calendarFiltered = [];
+
+class IcalInputScreen extends StatelessWidget {
+  static Constants style = Constants();
+  const IcalInputScreen({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    Widget titleSection = Container(
+      padding: const EdgeInsets.all(32),
+      child: Row(
+        children: [
+          Expanded(
+            /*1*/
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                /*2*/
+                Container(
+                  padding: EdgeInsets.fromLTRB(30, 50, 30, 50),
+                  decoration: BoxDecoration(
+                    color: Constants().primary.shade400,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Enter your iCal link here:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Constants().darkGreen,
+                          fontSize: 30,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 16),
+                        child: TextField(
+                          controller: myController,
+                          style: TextStyle(
+                            color: Constants().darkGreen,
+                          ),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            hintText:
+                                'If you would like to sync the app with your calendar, enter the link here.\n',
+                            hintStyle: TextStyle(color: Constants().gray),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: style.darkGreen,
+                          foregroundColor: style.white,
+                          minimumSize: const Size.fromHeight(50),
+                        ),
+                        onPressed: () {
+                          // send back to main screen with ical link
+                          Navigator.pop(context, myController.text);
+                        },
+                        child: const Text('Submit'),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  child: ExpandableNotifier(
+                    // <-- Provides ExpandableController to its children
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                      child: Column(
+                        children: [
+                          Expandable(
+                            // <-- Driven by ExpandableController from ExpandableNotifier
+                            collapsed: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                ExpandableButton(
+                                  // <-- Expands when tapped on the cover photo
+                                  child: Text(
+                                    "Instructions",
+                                    style: TextStyle(
+                                      color: Constants().darkGreen,
+                                      decoration: TextDecoration.underline,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            expanded: Column(children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  ExpandableButton(
+                                    // <-- Expands when tapped on the cover photo
+                                    child: Text(
+                                      "Instructions",
+                                      style: TextStyle(
+                                        color: Constants().darkGreen,
+                                        decoration: TextDecoration.underline,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              // Container(
+                              //   padding: const EdgeInsets.only(bottom: 8),
+                              //   child: const Text(
+                              //     'Welcome to integrate your lectures with your weather APP! \n \nYour iCal URL contains a secure token that prevents other people from accessing the events in your diary. You can deliberately share it with other people if you wish to let them see what is on your calendar.\n\nHow to find it?  Good question!',
+                              //     style: TextStyle(
+                              //       fontWeight: FontWeight.bold,
+                              //     ),
+                              //   ),
+                              // ),
+                              Text(
+                                'Google Calendar: under "Other Calendars", choose "Add by URL" and paste your URL.\n  \nMicrosoft Outlook: on the Home Tab in Outlook 2016, click the "Open Calendar" dropdown. Select "From Internet" and paste your URL.\n \nApple Calendar: on the File menu, select "Add Calendar Subscription..." and paste your URL.\nQuoted with thanks from KuDoS system.\n \nFor other situations, please have a search online.\n \n ',
+                                style: TextStyle(
+                                  color: Constants().darkGreen,
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  ExpandableButton(
+                                    // <-- Collapses when tapped on
+                                    child: Text(
+                                      "Close Instructions",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Constants().primary.shade100,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          /*3*/
+        ],
+      ),
+    );
+    return Scaffold(body: titleSection);
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -15,137 +186,120 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    const Widget home = MainPage(title: 'test');
-
-    var now = DateTime.now();
-
     return MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Calendar Sync',
         theme: ThemeData(
             primarySwatch: style.primary,
             scaffoldBackgroundColor: style.bg,
-            textTheme: GoogleFonts.latoTextTheme(
-              Theme.of(context).textTheme.copyWith(
-                    bodyLarge: TextStyle(color: style.primary[50]),
-                  ),
-            )),
-        home: Scaffold(
-            appBar: AppBar(
-              title: const Text('Flutter layout demo'),
+            textTheme: GoogleFonts.latoTextTheme().copyWith(
+              bodyLarge: TextStyle(color: style.primary[50]),
+              bodyMedium: TextStyle(color: style.primary[50]),
+              displayLarge: TextStyle(
+                color: style.white,
+                fontWeight: FontWeight.w700,
+              ),
+              displayMedium: TextStyle(
+                color: style.white,
+                fontWeight: FontWeight.w700,
+              ),
+              titleLarge: TextStyle(color: style.white),
+              titleMedium: TextStyle(color: style.white),
+              titleSmall: TextStyle(color: style.white),
             ),
-            body: home)
-        // const MyHomePage(title: 'Flutter Demo Home Page'),
-        );
-  }
-}
-
-class DronPage extends StatelessWidget {
-  const DronPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    var now = DateTime.now();
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 50.0),
-      children: [
-        Container(
-          padding: const EdgeInsets.fromLTRB(0, 150, 0, 50),
-          child: Column(
-            children: [
-              Text(
-                DateFormat('dd/MM/yy').format(now),
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              Text(
-                DateFormat.E().format(now),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              Stack(
-                children: [
-                  Center(
-                    child: Text(
-                      "18º",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.displayLarge,
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: FloatingActionButton(
-                      // heroTag: "topWeather",
-                      onPressed: () => {},
-                      child: const Icon(Icons.sunny),
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
-        ),
-        const Divider(),
-        ...ListTile.divideTiles(context: context, tiles: [
-          const ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            title: ListTitleText(title: "time of next rain"),
-            trailing: ListTitleText(title: "10am"),
-          ),
-          ExpansionTile(
-            title: const ListTitleText(title: "Next event 1"),
-            children: [
-              ...[for (var i = 2; i <= 10; i++) i].map((e) => ListTile(
-                    title: ListTitleText(title: "Next event $e"),
-                  )),
-              Builder(builder: (BuildContext context) {
-                return IconButton.filled(
-                    onPressed: () {
-                      return ExpansionTileController.of(context).collapse();
-                    },
-                    icon: const Icon(Icons.arrow_drop_up));
-              })
-            ],
-          )
-        ]),
-      ],
-    );
-  }
-}
-
-class ListTitleText extends StatelessWidget {
-  const ListTitleText({super.key, required this.title});
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: Theme.of(context).textTheme.headlineSmall,
-    );
+            colorScheme: ColorScheme.fromSeed(seedColor: style.primary),
+            useMaterial3: true),
+        home: const Scaffold(body: MainPage()));
   }
 }
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key, required this.title});
-
-  final String title;
+  const MainPage({super.key});
 
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-  bool isWeatherModalOpen = false;
-  bool isWindModalOpen = false;
+  String _ical = "";
+  late Future<List<Cal>> futureFilteredCal;
+  // final GlobalController globalController =
+  //     Get.put(GlobalController(), permanent: true);
+  late Future<WeatherData> asyncWeather;
 
-  void toggleWeatherModalOpen() {
-    setState(() {
-      isWeatherModalOpen = !isWeatherModalOpen;
-    });
+  @override
+  void initState() {
+    super.initState();
+    _loadical().then((_) => futureFilteredCal = getCal(_ical));
+    asyncWeather = _getWeather();
   }
 
-  void toggleWindModalOpen() {
-    setState(() {
-      isWindModalOpen = !isWindModalOpen;
-    });
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    futureFilteredCal = getCal(_ical);
+  }
+
+  Future<void> _loadical() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String ical = prefs.getString("ical") ?? "";
+    if (ical != "") {
+      setState(() {
+        _ical = ical;
+        prefs.setString("ical", ical);
+      });
+    } else {
+      if (context.mounted) {
+        final link = await Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const IcalInputScreen()));
+        setState(() {
+          _ical = link;
+          prefs.setString("ical", link);
+        });
+        futureFilteredCal = getCal(_ical);
+      }
+    }
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
+
+  Future<WeatherData> _getWeather() async {
+    final pos = await _determinePosition();
+    return FetchWeatherAPI().processWeatherData(pos.latitude, pos.longitude);
   }
 
   @override
@@ -156,75 +310,29 @@ class _MainPageState extends State<MainPage> {
         ListView(
           padding: const EdgeInsets.symmetric(horizontal: 50.0),
           children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(0, 150, 0, 50),
-              child: Column(
-                children: [
-                  Text(
-                    DateFormat('dd/MM/yy').format(now),
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  Text(
-                    DateFormat.E().format(now),
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  Stack(
-                    children: [
-                      Center(
-                        child: Text(
-                          "18º",
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.displayLarge,
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: FloatingActionButton(
-                          // heroTag: "topWeather",
-                          onPressed: () => showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  WeatherOverlay(toggleOpen: () {
-                                    Navigator.pop(context);
-                                  })),
-                          child: const Icon(Icons.sunny),
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
+            WeatherDisplayComponent(now, asyncWeather),
             const Divider(),
             ...ListTile.divideTiles(context: context, tiles: [
-              const ListTile(
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                title: ListTitleText(title: "time of next rain"),
-                trailing: ListTitleText(title: "10am"),
+              NextRainComponent(
+                now,
+                weather: asyncWeather,
               ),
-              ExpansionTile(
-                title: const ListTitleText(title: "Next event 1"),
-                children: [
-                  ...[for (var i = 2; i <= 10; i++) i].map((e) => ListTile(
-                        title: ListTitleText(title: "Next event $e"),
-                      )),
-                  Builder(builder: (BuildContext context) {
-                    return IconButton.filled(
-                        onPressed: () {
-                          return ExpansionTileController.of(context).collapse();
-                        },
-                        icon: const Icon(Icons.arrow_drop_up));
+              FutureBuilder<List<Cal>>(
+                  future: futureFilteredCal,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return EventComponent(snapshot.data!, asyncWeather);
+                    } else {
+                      return Center(
+                        child: Container(
+                            padding: const EdgeInsets.all(10.0),
+                            child: const CircularProgressIndicator()),
+                      );
+                    }
                   })
-                ],
-              )
             ]),
           ],
         ),
-        // WeatherOverlay(
-        //     key: const Key('overlayModal'),
-        //     isVisible: isWeatherModalOpen,
-        //     toggleOpen: toggleWeatherModalOpen)
       ],
     );
   }

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_app/model/weather_data.dart';
+import 'package:weather_app/model/weather_data_general.dart';
 
 import '../WeatherOverlay.dart';
 
 class WeatherDisplayComponent extends StatelessWidget {
-  const WeatherDisplayComponent(this.now, {super.key});
+  const WeatherDisplayComponent(this.now, this.weather, {super.key});
 
   final DateTime now;
+  final Future<WeatherData> weather;
 
   @override
   Widget build(BuildContext context) {
@@ -25,23 +28,44 @@ class WeatherDisplayComponent extends StatelessWidget {
           Stack(
             children: [
               Center(
-                child: Text(
-                  "18º",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.displayLarge,
-                ),
+                child: FutureBuilder(
+                    future: weather,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(
+                          "${(snapshot.data!.general!.current.feelsLike! - 273.15).toStringAsFixed(0)}º",
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.displayLarge,
+                        );
+                      }
+                      return const CircularProgressIndicator();
+                    }),
               ),
               Align(
                 alignment: Alignment.centerRight,
-                child: FloatingActionButton(
-                  // heroTag: "topWeather",
-                  onPressed: () => showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          WeatherOverlay(toggleOpen: () {
-                            Navigator.pop(context);
-                          })),
-                  child: const Icon(Icons.sunny),
+                child: FutureBuilder(
+                  future: weather,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return FloatingActionButton(
+                        // heroTag: "topWeather",
+                        onPressed: () => showDialog(
+                            context: context,
+                            builder: (BuildContext context) => WeatherOverlay(
+                                  toggleOpen: () {
+                                    Navigator.pop(context);
+                                  },
+                                  weather: snapshot.data!,
+                                )),
+                        child: ImageIcon(AssetImage(
+                            "lib/assets/${snapshot.data!.general!.current.weather![0].icon}.png")),
+                      );
+                    }
+                    return const FloatingActionButton(
+                      onPressed: null,
+                      child: CircularProgressIndicator(),
+                    );
+                  },
                 ),
               )
             ],

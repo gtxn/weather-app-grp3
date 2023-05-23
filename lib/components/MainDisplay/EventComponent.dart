@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:weather_app/calendar_ops.dart';
 import 'package:weather_app/components/MainDisplay/EventBlock.dart';
+import 'package:weather_app/model/weather_data.dart';
 
 import '../../assets/Constants.dart';
-import '../ListTitleText.dart';
 
 class EventComponent extends StatelessWidget {
   // Events structure:
@@ -15,10 +15,11 @@ class EventComponent extends StatelessWidget {
   //   }
   // ];
 
-  EventComponent(this.events, {super.key});
+  EventComponent(this.events, this.weather, {super.key});
 
   final style = Constants();
-  final events;
+  final List<Cal> events;
+  final Future<WeatherData> weather;
 
   IconData getIcon(weather) {
     IconData i;
@@ -39,7 +40,7 @@ class EventComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      title: EventBlock(events[0]),
+      title: EventBlock(events[0], weather),
       backgroundColor: style.primary.shade700,
       collapsedBackgroundColor: style.primary.shade300,
       collapsedTextColor: style.darkGreen,
@@ -47,7 +48,7 @@ class EventComponent extends StatelessWidget {
       childrenPadding: EdgeInsets.all(5),
       tilePadding: EdgeInsets.all(5),
       children: [
-        ...events.sublist(1).map((e) => EventBlock(e)),
+        ...events.sublist(1).map((e) => EventBlock(e, weather)),
         Builder(builder: (BuildContext context) {
           return IconButton.filled(
               onPressed: () {

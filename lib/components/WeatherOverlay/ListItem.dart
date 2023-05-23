@@ -3,11 +3,11 @@ import '../../assets/Constants.dart';
 
 class ListItem extends StatelessWidget {
   final String time;
-  final int weather; // 0: sunny, 1: cloudy, 2: rainy
+  final String icon;
   final Constants style = Constants();
 
   // The time is a string
-  ListItem({super.key, required this.time, required this.weather});
+  ListItem({super.key, required this.time, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class ListItem extends StatelessWidget {
               fontSize: 25,
             ),
           ),
-          Icon(iconArray[weather]),
+          ImageIcon(AssetImage("lib/assets/$icon.png")),
         ],
       ),
     );

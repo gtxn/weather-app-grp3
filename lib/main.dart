@@ -1,3 +1,4 @@
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,6 +12,9 @@ import 'package:weather_app/components/MainDisplay/NextRainComponent.dart';
 import 'package:weather_app/components/MainDisplay/WeatherDisplayComponent.dart';
 import 'package:weather_app/model/weather_data.dart';
 
+import 'components/IcalInputPage/IcalInstructions.dart';
+import 'components/IcalInputPage/IcalSubmission.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -19,9 +23,11 @@ void main() {
 final myController = TextEditingController();
 List<Cal> calendarFiltered = [];
 
+// Input screen for ical
 class IcalInputScreen extends StatelessWidget {
   static Constants style = Constants();
   const IcalInputScreen({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -32,55 +38,15 @@ class IcalInputScreen extends StatelessWidget {
           Expanded(
             /*1*/
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 /*2*/
-                Container(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: const Text(
-                    'Welcome to integrate your lectures with your weather APP! \n \nYour iCal URL contains a secure token that prevents other people from accessing the events in your diary. You can deliberately share it with other people if you wish to let them see what is on your calendar.\n\nHow to find it?  Good question!',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                IcalSubmission(
+                  style: style,
+                  myController: myController,
                 ),
-                Text(
-                  'Google Calendar: under "Other Calendars", choose "Add by URL" and paste your URL.\n  \nMicrosoft Outlook: on the Home Tab in Outlook 2016, click the "Open Calendar" dropdown. Select "From Internet" and paste your URL.\n \nApple Calendar: on the File menu, select "Add Calendar Subscription..." and paste your URL.\nQuoted with thanks from KuDoS system.\n \nFor other situations, please have a search online.\n \n ',
-                  style: TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-                const Text(
-                  'Enter your iCal link here:',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextField(
-                    controller: myController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText:
-                          'If you would like to sync the app with your calendar, enter the link here.\n',
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green, // background
-                    ),
-                    onPressed: () {
-                      // send back to main screen with ical link
-                      Navigator.pop(context, myController.text);
-                    },
-                    child: const Text('Submit'),
-                  ),
-                ),
+                const IcalInstructions(),
               ],
             ),
           ),

@@ -13,22 +13,6 @@ class EventBlock extends StatelessWidget {
   final style = Constants();
   final Future<WeatherData> weather;
 
-  IconData getIcon(weather) {
-    IconData i;
-
-    if (weather == 0) {
-      i = Icons.sunny;
-    } else if (weather == 1) {
-      i = Icons.cloud;
-    } else if (weather == 2) {
-      i = Icons.umbrella;
-    } else {
-      i = Icons.snowing;
-    }
-
-    return i;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -94,7 +78,10 @@ class TempWeatherRect extends StatelessWidget {
             child: Row(
           children: [
             ImageIcon(AssetImage("lib/assets/$icon.png")),
-            Text("${temp.toStringAsFixed(0)}°", textAlign: TextAlign.center)
+            Text(
+              "${temp.toStringAsFixed(0)}°",
+              textAlign: TextAlign.center,
+            )
           ],
         )));
   }

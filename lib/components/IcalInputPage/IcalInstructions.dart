@@ -13,7 +13,7 @@ class IcalInstructions extends StatelessWidget {
     return ExpandableNotifier(
       // <-- Provides ExpandableController to its children
       child: Container(
-        padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
+        padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
         child: Column(
           children: [
             Expandable(

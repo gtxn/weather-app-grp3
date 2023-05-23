@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/model/weather_data.dart';
-import 'package:weather_app/model/weather_data_general.dart';
 
 import '../WeatherOverlay.dart';
 

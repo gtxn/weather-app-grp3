@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:ffi';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:icalendar_parser/icalendar_parser.dart';
@@ -199,11 +196,11 @@ class Cal {
   }
 
   void printClassForDebug() {
-    print(this.latitude);
-    print(this.longitude);
-    print(this.summary);
-    print(this.startTime);
-    print(this.endTime);
+    print(latitude);
+    print(longitude);
+    print(summary);
+    print(startTime);
+    print(endTime);
   }
 }
 
@@ -215,7 +212,7 @@ String currentTimeStampiCal() {
   // print(cdate);
   String tdata = DateFormat("HHmmss").format(DateTime.now());
   // print(tdata);
-  String fullTime = cdate + 'T' + tdata + 'Z';
+  String fullTime = '${cdate}T${tdata}Z';
   // print(fullTime);
   return fullTime;
 }

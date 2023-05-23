@@ -1,10 +1,5 @@
-import 'package:geolocator/geolocator.dart';
 
-import 'package:get/get.dart';
-import 'package:weather_app/api/fetch_ical.dart';
-import 'package:weather_app/model/weather_data.dart';
 
-import '../api/fetch_weather.dart';
 
 // class GlobalController {
 //   final RxBool _isLoading = true.obs;

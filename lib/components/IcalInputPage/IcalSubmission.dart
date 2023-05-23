@@ -15,7 +15,7 @@ class IcalSubmission extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(30, 50, 30, 50),
+      padding: const EdgeInsets.fromLTRB(30, 50, 30, 50),
       decoration: BoxDecoration(
         color: Constants().primary.shade400,
         borderRadius: BorderRadius.circular(10),

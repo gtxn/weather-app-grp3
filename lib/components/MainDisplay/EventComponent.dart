@@ -45,8 +45,8 @@ class EventComponent extends StatelessWidget {
       collapsedBackgroundColor: style.primary.shade300,
       collapsedTextColor: style.darkGreen,
       textColor: style.white,
-      childrenPadding: EdgeInsets.all(5),
-      tilePadding: EdgeInsets.all(5),
+      childrenPadding: const EdgeInsets.all(5),
+      tilePadding: const EdgeInsets.all(5),
       children: [
         ...events.sublist(1).map((e) => EventBlock(e, weather)),
         Builder(builder: (BuildContext context) {

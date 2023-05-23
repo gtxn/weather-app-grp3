@@ -12,6 +12,9 @@ import 'package:weather_app/components/MainDisplay/NextRainComponent.dart';
 import 'package:weather_app/components/MainDisplay/WeatherDisplayComponent.dart';
 import 'package:weather_app/model/weather_data.dart';
 
+import 'components/IcalInputPage/IcalInstructions.dart';
+import 'components/IcalInputPage/IcalSubmission.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -20,6 +23,7 @@ void main() {
 final myController = TextEditingController();
 List<Cal> calendarFiltered = [];
 
+// Input screen for ical
 class IcalInputScreen extends StatelessWidget {
   static Constants style = Constants();
   const IcalInputScreen({super.key});
@@ -38,136 +42,11 @@ class IcalInputScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 /*2*/
-                Container(
-                  padding: EdgeInsets.fromLTRB(30, 50, 30, 50),
-                  decoration: BoxDecoration(
-                    color: Constants().primary.shade400,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Enter your iCal link here:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Constants().darkGreen,
-                          fontSize: 30,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 16),
-                        child: TextField(
-                          controller: myController,
-                          style: TextStyle(
-                            color: Constants().darkGreen,
-                          ),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            hintText:
-                                'If you would like to sync the app with your calendar, enter the link here.\n',
-                            hintStyle: TextStyle(color: Constants().gray),
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: style.darkGreen,
-                          foregroundColor: style.white,
-                          minimumSize: const Size.fromHeight(50),
-                        ),
-                        onPressed: () {
-                          // send back to main screen with ical link
-                          Navigator.pop(context, myController.text);
-                        },
-                        child: const Text('Submit'),
-                      ),
-                    ],
-                  ),
+                IcalSubmission(
+                  style: style,
+                  myController: myController,
                 ),
-                Container(
-                  child: ExpandableNotifier(
-                    // <-- Provides ExpandableController to its children
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                      child: Column(
-                        children: [
-                          Expandable(
-                            // <-- Driven by ExpandableController from ExpandableNotifier
-                            collapsed: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                ExpandableButton(
-                                  // <-- Expands when tapped on the cover photo
-                                  child: Text(
-                                    "Instructions",
-                                    style: TextStyle(
-                                      color: Constants().darkGreen,
-                                      decoration: TextDecoration.underline,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            expanded: Column(children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  ExpandableButton(
-                                    // <-- Expands when tapped on the cover photo
-                                    child: Text(
-                                      "Instructions",
-                                      style: TextStyle(
-                                        color: Constants().darkGreen,
-                                        decoration: TextDecoration.underline,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              // Container(
-                              //   padding: const EdgeInsets.only(bottom: 8),
-                              //   child: const Text(
-                              //     'Welcome to integrate your lectures with your weather APP! \n \nYour iCal URL contains a secure token that prevents other people from accessing the events in your diary. You can deliberately share it with other people if you wish to let them see what is on your calendar.\n\nHow to find it?  Good question!',
-                              //     style: TextStyle(
-                              //       fontWeight: FontWeight.bold,
-                              //     ),
-                              //   ),
-                              // ),
-                              Text(
-                                'Google Calendar: under "Other Calendars", choose "Add by URL" and paste your URL.\n  \nMicrosoft Outlook: on the Home Tab in Outlook 2016, click the "Open Calendar" dropdown. Select "From Internet" and paste your URL.\n \nApple Calendar: on the File menu, select "Add Calendar Subscription..." and paste your URL.\nQuoted with thanks from KuDoS system.\n \nFor other situations, please have a search online.\n \n ',
-                                style: TextStyle(
-                                  color: Constants().darkGreen,
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  ExpandableButton(
-                                    // <-- Collapses when tapped on
-                                    child: Text(
-                                      "Close Instructions",
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Constants().primary.shade100,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ]),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                const IcalInstructions(),
               ],
             ),
           ),

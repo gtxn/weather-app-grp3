@@ -65,6 +65,7 @@ class EventBlock extends StatelessWidget {
   }
 }
 
+// creds to jeremiah
 class TempWeatherRect extends StatelessWidget {
   final double temp;
   final String icon;
